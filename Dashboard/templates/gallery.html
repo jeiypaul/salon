@@ -1,0 +1,225 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gallery – Glow Salon</title>
+  <style>
+    /* ---------- Gallery page ---------- */
+.gallery-head { text-align: center; padding-top: 40px; }
+.gallery-head h1 { margin: 0 0 6px; }
+
+.gallery { padding-top: 24px; padding-bottom: 56px; }
+.gallery__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+.gallery__item { margin: 0; border: 1px solid rgba(0, 0, 0, .1); border-radius: 18px; overflow: hidden; background: #fff; }
+.gallery__open { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; overflow: hidden; }
+.gallery__open img { width: 100%; height: 280px; object-fit: cover; display: block; transition: transform .3s ease; }
+.gallery__open:hover img { transform: scale(1.04); }
+.gallery__item figcaption { padding: 14px 16px 16px; }
+.gallery__item h3 { margin: 0 0 4px; font-size: 1.05rem; }
+.gallery__item p { margin: 0; opacity: .75; font-size: .92rem; }
+.gallery__delete {
+  margin-top: 10px; padding: 6px 12px; border-radius: 8px; border: 1px solid #c0392b;
+  background: none; color: #c0392b; font: inherit; font-size: .85rem; cursor: pointer;
+}
+.gallery__delete:hover { background: #c0392b; color: #fff; }
+
+.gallery__grid { display: grid !important; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)) !important; gap: 20px; }
+.gallery__open img, .gallery__item img { width: 100% !important; height: 280px !important; object-fit: cover; display: block; }
+.lightbox img { max-width: 100% !important; max-height: 70vh !important; width: auto !important; height: auto !important; }
+
+/* Staff add form */
+.gallery-add { margin: 24px auto; padding: 24px; border: 1px dashed rgba(0, 0, 0, .25); border-radius: 18px; background: rgba(0, 0, 0, .02); }
+.gallery-add h2 { margin: 0 0 14px; font-size: 1.2rem; }
+.gallery-add__form { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: end; }
+.gallery-add__wide { grid-column: 1 / -1; }
+.gallery-add .field input[type="text"],
+.gallery-add .field textarea { width: 100%; }
+.gallery-add .errorlist { margin: 4px 0 0; padding: 0; list-style: none; color: #c0392b; font-size: .85rem; }
+
+/* Lightbox */
+.lightbox {
+  position: fixed; inset: 0; z-index: 200; background: rgba(0, 0, 0, .88);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 24px; text-align: center; color: #fff;
+}
+.lightbox[hidden] { display: none; }
+.lightbox img { max-width: 100%; max-height: 70vh; border-radius: 12px; }
+.lightbox h3 { margin: 14px 0 4px; }
+.lightbox p { margin: 0; max-width: 560px; opacity: .85; }
+.lightbox__close { position: absolute; top: 14px; right: 20px; background: none; border: 0; color: #fff; font-size: 2.4rem; line-height: 1; cursor: pointer; }
+
+@media (max-width: 640px) {
+  .gallery-add__form { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) { .gallery__open img { transition: none; } }
+@media (max-width: 900px) {
+  .gallery__grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+  .gallery__open img { height: 220px !important; }
+}
+@media (max-width: 560px) {
+  .gallery__grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .gallery__open img { height: 170px !important; }
+  .gallery__item figcaption { padding: 10px; }
+  .gallery__item h3 { font-size: .95rem; }
+  .gallery__item p { display: none; }
+  .gallery-add { padding: 16px; }
+}
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></symbol>
+  </svg>
+
+  <!-- ========== HEADER ========== -->
+  <header class="header container">
+    <a href="{% url 'index' %}" class="logo" aria-label="Glow Salon home">
+      <span class="logo__word">GL<span class="logo__o">O</span>W</span>
+      <span class="logo__sub">SALON</span>
+    </a>
+
+    <nav class="nav" aria-label="Main">
+      <a href="{% url 'index' %}" class="nav__link">Home</a>
+      <a href="{% url 'services' %}" class="nav__link">Services</a>
+      <a href="{% url 'gallery' %}" class="nav__link is-active">Gallery</a>
+      <a href="{% url 'about' %}" class="nav__link">About</a>
+      <a href="{% url 'contact' %}" class="nav__link">Contact</a>
+
+      {% if request.user.is_staff %}
+        <a href="{% url 'dashboard' %}" class="nav__admin"><svg><use href="#i-lock"/></svg> Dashboard</a>
+      {% else %}
+        <a href="{% url 'dashboard_login' %}" class="nav__admin"><svg><use href="#i-lock"/></svg> Admin Login</a>
+      {% endif %}
+
+      <a href="{% url 'index' %}#book" class="btn btn--dark nav__cta">Book Now</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ========== TITLE ========== -->
+    <section class="gallery-head container">
+      <h1>Our Gallery</h1>
+      <p class="section-sub">A look at the styles we create. Tap a photo to see it larger.</p>
+    </section>
+
+    <!-- ========== MESSAGES ========== -->
+    {% if messages %}
+      <div class="container">
+        {% for message in messages %}
+          <p class="booking__success" role="status">{{ message }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <!-- ========== STAFF: ADD A PHOTO ========== -->
+    {% if request.user.is_staff %}
+      <section class="gallery-add container">
+        <h2>Add a hairstyle</h2>
+        <form method="post" enctype="multipart/form-data" class="gallery-add__form">
+          {% csrf_token %}
+          <label class="field">
+            <span>Hairstyle name</span>
+            {{ form.name }}
+            {{ form.name.errors }}
+          </label>
+          <label class="field">
+            <span>Photo</span>
+            {{ form.image }}
+            {{ form.image.errors }}
+          </label>
+          <label class="field gallery-add__wide">
+            <span>Description</span>
+            {{ form.description }}
+            {{ form.description.errors }}
+          </label>
+          <button type="submit" class="btn btn--dark">Add to gallery</button>
+        </form>
+      </section>
+    {% endif %}
+
+    <!-- ========== GALLERY ========== -->
+    <section class="gallery container" id="gallery">
+      {% if items %}
+        <div class="gallery__grid">
+          {% for item in items %}
+            <figure class="gallery__item">
+              <button type="button" class="gallery__open"
+                      data-src="{{ item.image.url }}"
+                      data-name="{{ item.name }}"
+                      data-desc="{{ item.description }}"
+                      aria-label="View {{ item.name }}">
+                <img src="{{ item.image.url }}" alt="{{ item.name }}" loading="lazy">
+              </button>
+              <figcaption>
+                <h3>{{ item.name }}</h3>
+                {% if item.description %}<p>{{ item.description|truncatechars:90 }}</p>{% endif %}
+
+                {% if request.user.is_staff %}
+                  <form method="post" action="{% url 'gallery_delete' item.pk %}"
+                        onsubmit="return confirm('Remove this photo?');">
+                    {% csrf_token %}
+                    <button type="submit" class="gallery__delete">Delete</button>
+                  </form>
+                {% endif %}
+              </figcaption>
+            </figure>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="section-sub">No photos yet. Please check back soon.</p>
+      {% endif %}
+    </section>
+
+  </main>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" hidden>
+    <button type="button" class="lightbox__close" aria-label="Close">&times;</button>
+    <img src="" alt="" id="lbImg">
+    <h3 id="lbName"></h3>
+    <p id="lbDesc"></p>
+  </div>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer container" id="contact">
+    <p>© {% now "Y" %} GLOW SALON <i>•</i> Nairobi, Kenya</p>
+    <nav aria-label="Footer">
+      <a href="#">Privacy</a> <i>•</i> <a href="#">Terms</a> <i>•</i>
+      <a href="#">Instagram</a> <i>•</i> <a href="#">WhatsApp</a>
+    </nav>
+  </footer>
+
+  <script>
+    (function () {
+      var box = document.getElementById("lightbox");
+      var img = document.getElementById("lbImg");
+      var nm = document.getElementById("lbName");
+      var ds = document.getElementById("lbDesc");
+
+      document.querySelectorAll(".gallery__open").forEach(function (b) {
+        b.addEventListener("click", function () {
+          img.src = b.dataset.src;
+          img.alt = b.dataset.name;
+          nm.textContent = b.dataset.name;
+          ds.textContent = b.dataset.desc;
+          box.hidden = false;
+        });
+      });
+
+      function close() { box.hidden = true; img.src = ""; }
+      box.addEventListener("click", function (e) {
+        if (e.target === box || e.target.classList.contains("lightbox__close")) close();
+      });
+      document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
+    })();
+  </script>
+</body>
+</html>

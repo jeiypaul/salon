@@ -1,0 +1,87 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bookings – Glow Salon Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'dashboard.css' %}">
+</head>
+<body>
+
+  <header class="topbar">
+    <p class="topbar__brand">GLOW <span>SALON</span> · Admin</p>
+    <div class="topbar__right">
+      <span>{{ request.user.get_username }}</span>
+      <form method="post" action="{% url 'dashboard_logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn-ghost">Log out</button>
+      </form>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <h1>Bookings</h1>
+
+    <nav class="tabs" aria-label="Filter by status">
+      <a href="{% url 'dashboard' %}" class="{% if not status %}is-active{% endif %}">All <b>{{ counts.all }}</b></a>
+      {% for value, label in statuses %}
+        <a href="?status={{ value }}" class="{% if status == value %}is-active{% endif %}">
+          {{ label }} <b>{% if value == 'pending' %}{{ counts.pending }}{% elif value == 'confirmed' %}{{ counts.confirmed }}{% else %}{{ counts.cancelled }}{% endif %}</b>
+        </a>
+      {% endfor %}
+    </nav>
+
+    <form class="search" method="get">
+      {% if status %}<input type="hidden" name="status" value="{{ status }}">{% endif %}
+      <input type="search" name="q" value="{{ q }}" placeholder="Search by name or email...">
+      <button type="submit" class="btn-primary">Search</button>
+    </form>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Client</th><th>Service</th><th>Date</th><th>Time</th>
+            <th>Notes</th><th>Status</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for b in bookings %}
+          <tr>
+            <td>
+              <strong>{{ b.name }}</strong><br>
+              <a href="mailto:{{ b.email }}">{{ b.email }}</a>
+            </td>
+            <td>{{ b.get_service_display }}</td>
+            <td>{{ b.date|date:"D, d M Y" }}</td>
+            <td>{{ b.time|time:"g:i A" }}</td>
+            <td class="notes">{{ b.notes|default:"—" }}</td>
+            <td><span class="badge badge--{{ b.status }}">{{ b.get_status_display }}</span></td>
+            <td class="actions">
+              <form method="post" action="{% url 'booking_status' b.pk %}">
+                {% csrf_token %}
+                {% if b.status != 'confirmed' %}
+                  <button name="status" value="confirmed" class="btn-sm btn-sm--ok">Confirm</button>
+                {% endif %}
+                {% if b.status != 'cancelled' %}
+                  <button name="status" value="cancelled" class="btn-sm btn-sm--no">Cancel</button>
+                {% endif %}
+              </form>
+            </td>
+            <td>
+  <span class="badge badge--pay-{{ b.payment_status }}">{{ b.get_payment_status_display }}</span>
+  {% if b.mpesa_receipt %}<br><small>{{ b.mpesa_receipt }}</small>{% endif %}
+</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="7" class="empty">No bookings found.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+</body>
+</html>

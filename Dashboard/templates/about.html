@@ -1,0 +1,178 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About – Glow Salon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4M8 14h.01M12 14h.01M16 14h.01M8 17h.01M12 17h.01"/></symbol>
+  </svg>
+
+  <!-- ========== HEADER ========== -->
+  <header class="header container">
+    <a href="{% url 'index' %}" class="logo" aria-label="Glow Salon home">
+      <span class="logo__word">GL<span class="logo__o">O</span>W</span>
+      <span class="logo__sub">SALON</span>
+    </a>
+
+    <nav class="nav" aria-label="Main">
+      <a href="{% url 'index' %}" class="nav__link">Home</a>
+      <a href="{% url 'services' %}#services" class="nav__link">Services</a>
+      <a href="{% url 'gallery' %}#gallery" class="nav__link">Gallery</a>
+      <a href="{% url 'about' %}" class="nav__link is-active">About</a>
+      <a href="{% url 'contact' %}" class="nav__link">Contact</a>
+
+      {% if request.user.is_staff %}
+        <a href="{% url 'dashboard' %}" class="nav__admin"><svg><use href="#i-lock"/></svg> Dashboard</a>
+      {% else %}
+        <a href="{% url 'dashboard_login' %}" class="nav__admin"><svg><use href="#i-lock"/></svg> Admin Login</a>
+      {% endif %}
+
+      <a href="{% url 'index' %}#book" class="btn btn--dark nav__cta">Book Now</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ========== INTRO ========== -->
+    <section class="hero container">
+      <div class="hero__text">
+        <h1>Our Story</h1>
+        <p class="hero__lead">Glow Salon opened in Nairobi in 2021 with one idea: everyone should leave feeling more like themselves. We specialise in braids, natural haircare and manicures, done with patience and care.</p>
+
+        <div class="hero__buttons">
+          <a href="{% url 'index' %}#book" class="btn btn--dark btn--lg">
+            <svg><use href="#i-calendar"/></svg> Book Appointment
+          </a>
+          <a href="{% url 'index' %}#services" class="btn btn--light btn--lg">Our Services</a>
+        </div>
+
+        <ul class="stats">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.9 6.8 19.7l1-5.9L3.5 9.7l5.9-.8z"/></svg>
+            4.9/5 Rating
+          </li>
+          <li class="dot" aria-hidden="true">•</li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><path d="M16 4.7a3.5 3.5 0 010 6.6M18.5 14.4c1.8.8 3 2.6 3 5.1"/></svg>
+            500+ Clients
+          </li>
+          <li class="dot" aria-hidden="true">•</li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/></svg>
+            Since 2021
+          </li>
+        </ul>
+      </div>
+
+      <figure class="hero__photo">
+        <img src="{% static 'images/about.jpg' %}" alt="Stylist braiding a client's hair at Glow Salon" onerror="this.remove()">
+      </figure>
+    </section>
+
+    <!-- ========== WHAT WE BELIEVE ========== -->
+    <section class="services about-values">
+      <h2>What We Believe</h2>
+      <p class="section-sub">The values behind every appointment.</p>
+
+      <div class="services__grid">
+        <article class="card">
+          <header class="card__head">
+            <span class="card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 017-2.6A4 4 0 0119 10c0 5.6-7 10-7 10z"/></svg>
+            </span>
+            <h3>Care first</h3>
+          </header>
+          <p class="card__desc">We take our time. Gentle hands, no rushing, and honest advice on what suits your hair and skin.</p>
+        </article>
+
+        <article class="card">
+          <header class="card__head">
+            <span class="card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/></svg>
+            </span>
+            <h3>Quality you can see</h3>
+          </header>
+          <p class="card__desc">Neat parting, clean finishes and good products, so your style lasts and your hair stays healthy.</p>
+        </article>
+
+        <article class="card">
+          <header class="card__head">
+            <span class="card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><path d="M16 4.7a3.5 3.5 0 010 6.6M18.5 14.4c1.8.8 3 2.6 3 5.1"/></svg>
+            </span>
+            <h3>Everyone is welcome</h3>
+          </header>
+          <p class="card__desc">A relaxed, friendly space for every hair type, age and style, with fair and clear prices.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ========== HOW IT WORKS ========== -->
+    <section class="about-steps">
+      <h2>How Your Visit Works</h2>
+      <p class="section-sub">Simple from booking to finish.</p>
+
+      <ol class="about-steps__list">
+        <li><span>1</span><h3>Book online</h3><p>Pick a service, date and time. It takes a couple of minutes.</p></li>
+        <li><span>2</span><h3>We confirm</h3><p>You hear from us shortly to confirm your appointment.</p></li>
+        <li><span>3</span><h3>Relax and glow</h3><p>Arrive, settle in, and let our team take care of the rest.</p></li>
+      </ol>
+    </section>
+
+    <!-- ========== TEAM ========== -->
+    <section class="services about-team">
+      <h2>Meet the Team</h2>
+      <p class="section-sub">The people behind your glow.</p>
+
+      <div class="services__grid">
+        <article class="card about-person">
+          <img src="{% static 'images/team1.jpg' %}" alt="Founder and lead stylist" onerror="this.remove()">
+          <h3>Veronicah Wairimu</h3>
+          <p class="card__desc">Founder &amp; lead stylist. Specialises in braids and protective styles.</p>
+        </article>
+        <article class="card about-person">
+          <img src="{% static 'images/team2.jpg' %}" alt="Nail technician" onerror="this.remove()">
+          <h3>Name Surname</h3>
+          <p class="card__desc">Nail technician. Classic and gel manicures with careful finishing.</p>
+        </article>
+        <article class="card about-person">
+          <img src="{% static 'images/team3.jpg' %}" alt="Natural hair specialist" onerror="this.remove()">
+          <h3>Name Surname</h3>
+          <p class="card__desc">Natural hair specialist. Treatments, conditioning and healthy-growth care.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ========== CALL TO ACTION ========== -->
+    <section class="about-cta">
+      <h2>Ready for your glow?</h2>
+      <p>Book your visit in minutes. Free cancellation up to 24 hours before.</p>
+      <a href="{% url 'index' %}#book" class="btn btn--light btn--lg">
+        <svg><use href="#i-calendar"/></svg> Book Appointment
+      </a>
+    </section>
+
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer container" id="contact">
+    <p>© {% now "Y" %} GLOW SALON <i>•</i> Nairobi, Kenya</p>
+    <nav aria-label="Footer">
+      <a href="#">Privacy</a> <i>•</i> <a href="#">Terms</a> <i>•</i>
+      <a href="#">Instagram</a> <i>•</i> <a href="#">WhatsApp</a>
+    </nav>
+  </footer>
+
+</body>
+</html>

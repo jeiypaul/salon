@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin Login – Glow Salon</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'dashboard.css' %}">
+</head>
+<body class="login-body">
+  <main class="login">
+    <p class="login__brand">GLOW <span>SALON</span></p>
+    <h1>Admin Login</h1>
+    <p class="login__sub">Sign in to view and manage bookings.</p>
+
+    <form method="post">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ next }}">
+
+      {% if form.errors %}
+        <div class="alert" role="alert">
+          {% for error in form.non_field_errors %}{{ error }}{% empty %}Please enter a valid username and password.{% endfor %}
+        </div>
+      {% endif %}
+
+      <label class="field">
+        <span>Username</span>
+        <input type="text" name="username" autocomplete="username" autofocus required>
+      </label>
+      <label class="field">
+        <span>Password</span>
+        <input type="password" name="password" autocomplete="current-password" required>
+      </label>
+
+      <button type="submit" class="btn-primary">Log in</button>
+    </form>
+  </main>
+</body>
+</html>

@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pay with M-Pesa – Glow Salon</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body class="pay-body">
+  <main class="pay">
+    <a href="{% url 'index' %}" class="pay__brand">GLOW <span>SALON</span></a>
+
+    {% if booking.payment_status == 'paid' %}
+      <h1>Payment received</h1>
+      <p class="pay__sub">Thank you, {{ booking.name }}! Your booking is confirmed.</p>
+    {% elif booking.payment_status == 'pending' %}
+      <h1>Check your phone</h1>
+      <p class="pay__sub">We sent an M-Pesa prompt to <strong>{{ booking.mpesa_phone }}</strong>. Enter your PIN to pay.</p>
+    {% else %}
+      <h1>Pay with M-Pesa</h1>
+      <p class="pay__sub">Your booking is saved. Pay now to secure your slot.</p>
+    {% endif %}
+
+    <dl class="pay__summary">
+      <div><dt>Service</dt><dd>{{ booking.service_name }}</dd></div>
+      <div><dt>Date</dt><dd>{{ booking.date|date:"D, d M Y" }}</dd></div>
+      <div><dt>Time</dt><dd>{{ booking.time|time:"g:i A" }}</dd></div>
+      <div class="pay__total"><dt>Amount</dt><dd>KES {{ booking.amount }}</dd></div>
+      {% if booking.mpesa_receipt %}
+        <div><dt>M-Pesa receipt</dt><dd>{{ booking.mpesa_receipt }}</dd></div>
+      {% endif %}
+    </dl>
+
+    {% if booking.payment_status == 'paid' %}
+    {% for message in messages %}
+  <div class="pay__success" role="status">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-7"/></svg>
+    <span>{{ message }}</span>
+  </div>
+{% endfor %}
+      <a href="{% url 'index' %}" class="pay__btn">Back to home</a>
+
+    {% elif booking.payment_status == 'pending' %}
+      <div class="pay__wait" role="status"><span class="spinner"></span> Waiting for your payment…</div>
+      <p id="retry" class="pay__hint" hidden>
+        No prompt? <a href="?retry=1">Try again or use another number</a>
+      </p>
+
+    {% else %}
+      {% if booking.payment_status == 'failed' %}
+        <p class="pay__error" role="alert">{{ booking.payment_note|default:"The payment was not completed." }} Please try again.</p>
+      {% endif %}
+      {% if error %}<p class="pay__error" role="alert">{{ error }}</p>{% endif %}
+
+      <form method="post">
+        {% csrf_token %}
+        <label class="field">
+          <span>M-Pesa phone number</span>
+          <input type="tel" name="phone" inputmode="tel" placeholder="0712 345 678"
+                 value="{{ booking.mpesa_phone }}" required autofocus>
+        </label>
+        <button type="submit" class="pay__btn">Pay KES {{ booking.amount }} with M-Pesa</button>
+      </form>
+      <p class="pay__hint">You'll get a prompt on your phone. Enter your M-Pesa PIN to confirm.</p>
+    {% endif %}
+  </main>
+
+  {% if booking.payment_status == 'pending' %}
+  <script>
+    const statusUrl = "{% url 'payment_status' booking.reference %}";
+    let checks = 0;
+    setTimeout(() => document.getElementById("retry").hidden = false, 30000);
+
+    const timer = setInterval(async () => {
+      checks++;
+      try {
+        const res = await fetch(statusUrl, { headers: { Accept: "application/json" } });
+        const data = await res.json();
+        if (data.status !== "pending") { clearInterval(timer); location.reload(); }
+      } catch (e) { /* network blip: try again on the next tick */ }
+      if (checks > 45) clearInterval(timer);   // stop after about 3 minutes
+    }, 4000);
+  </script>
+  {% endif %}
+</body>
+</html>

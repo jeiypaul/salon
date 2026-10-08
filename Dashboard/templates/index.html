@@ -1,0 +1,223 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Glow Salon – Beauty that Speaks</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+
+  <!-- Reusable icons -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4M8 14h.01M12 14h.01M16 14h.01M8 17h.01M12 17h.01"/></symbol>
+  </svg>
+
+  <!-- ========== HEADER ========== -->
+  <header class="header container">
+    <a href="{% url 'index' %}" class="logo" aria-label="Glow Salon home">
+      <span class="logo__word">GL<span class="logo__o">O</span>W</span>
+      <span class="logo__sub">SALON</span>
+    </a>
+
+    <nav class="nav" aria-label="Main">
+      <a href="{% url 'index' %}" class="nav__link is-active">Home</a>
+      <a href="{% url 'services' %}" class="nav__link">Services</a>
+      <a href="{% url 'gallery' %}" class="nav__link">Gallery</a>
+      <a href="{% url 'about' %}" class="nav__link">About</a>
+      <a href="{% url 'contact' %}" class="nav__link">Contact</a>
+
+      {% if request.user.is_staff %}
+        <a href="{% url 'dashboard' %}" class="nav__admin">
+          <svg><use href="#i-lock"/></svg> Dashboard
+        </a>
+      {% else %}
+        <a href="{% url 'dashboard_login' %}" class="nav__admin">
+          <svg><use href="#i-lock"/></svg> Admin Login
+        </a>
+      {% endif %}
+
+      <a href="#book" class="btn btn--dark nav__cta">Book Now</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ========== HERO ========== -->
+    <section class="hero container">
+      <div class="hero__text">
+        <h1>Beauty that Speaks</h1>
+        <p class="hero__lead">Experience luxury haircare, braids, and manicures tailored to you. Book your appointment in minutes and step into your glow.</p>
+
+        <div class="hero__buttons">
+          <a href="#book" class="btn btn--dark btn--lg">
+            <svg><use href="#i-calendar"/></svg> Book Appointment
+          </a>
+          <a href="{% url 'services' %}" class="btn btn--light btn--lg">Explore Services</a>
+        </div>
+
+        <ul class="stats">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.9 6.8 19.7l1-5.9L3.5 9.7l5.9-.8z"/></svg>
+            4.9/5 Rating
+          </li>
+          <li class="dot" aria-hidden="true">•</li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><path d="M16 4.7a3.5 3.5 0 010 6.6M18.5 14.4c1.8.8 3 2.6 3 5.1"/></svg>
+            500+ Clients
+          </li>
+          <li class="dot" aria-hidden="true">•</li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/></svg>
+            Since 2021
+          </li>
+        </ul>
+      </div>
+
+      <figure class="hero__photo">
+        <img src="{% static 'images/hero.jpg' %}" alt="Woman with neat cornrow braids and gold earrings" onerror="this.remove()">
+      </figure>
+    </section>
+
+    <!-- ========== SERVICES ========== -->
+    <section class="services" id="services">
+      <h2>Our Services</h2>
+      <p class="section-sub">Curated treatments designed to highlight your natural beauty.</p>
+
+      <div class="services__grid">
+
+        <article class="card">
+          <header class="card__head">
+            <span class="card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c-2 2-2 4 0 6 2 2 2 4 0 6s-2 4 0 6"/><path d="M9 6c1.5.5 2.5 1.5 3 3M15 6c-1.5.5-2.5 1.5-3 3M9 12c1.5.5 2.5 1.5 3 3M15 12c-1.5.5-2.5 1.5-3 3"/></svg>
+            </span>
+            <h3>Knotless Braids</h3>
+          </header>
+          <p class="card__desc">Protective braiding style done with care for natural, lightweight, long-lasting results.</p>
+          <p class="card__price">KES 3,500</p>
+          <div class="card__foot">
+            <span>Duration: 3-4 hrs • From 6 weeks wear</span>
+            <a href="#book" class="card__go" aria-label="Book Knotless Braids"><svg><use href="#i-arrow"/></svg></a>
+          </div>
+        </article>
+
+        <article class="card">
+          <header class="card__head">
+            <span class="card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M8 7h8v3H8zM9 10v8a3 3 0 006 0v-8"/><path d="M12 12v4"/></svg>
+            </span>
+            <h3>Manicure</h3>
+          </header>
+          <p class="card__desc">Classic and gel manicure for polished, clean, elegant nails. Includes cuticle care &amp; polish.</p>
+          <p class="card__price">KES 1,800</p>
+          <div class="card__foot">
+            <span>Duration: 45 mins • Gel available +500 KES</span>
+            <a href="#book" class="card__go" aria-label="Book Manicure"><svg><use href="#i-arrow"/></svg></a>
+          </div>
+        </article>
+
+        <article class="card">
+          <header class="card__head">
+            <span class="card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21v-9"/><path d="M12 12c-4 0-6-2.5-6-6 4 0 6 2 6 6zM12 12c4 0 6-2.5 6-6-4 0-6 2-6 6zM12 16c-3 0-4.5-1.5-4.5-4 3 0 4.5 1.5 4.5 4zM12 16c3 0 4.5-1.5 4.5-4-3 0-4.5 1.5-4.5 4z"/></svg>
+            </span>
+            <h3>Natural Haircare</h3>
+          </header>
+          <p class="card__desc">Deep conditioning, scalp treatment, and natural hair styling for healthy growth.</p>
+          <p class="card__price">KES 2,500</p>
+          <div class="card__foot">
+            <span>Duration: 1-2 hrs • Vegan products</span>
+            <a href="#book" class="card__go" aria-label="Book Natural Haircare"><svg><use href="#i-arrow"/></svg></a>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ========== BOOKING ========== -->
+    <section class="booking" id="book">
+      <h2>Book Your Visit</h2>
+      <p class="booking__sub">Select your service, date, and time. We'll confirm your appointment shortly.</p>
+
+      {% for message in messages %}
+        <p class="booking__success" role="status">{{ message }}</p>
+      {% endfor %}
+
+      <form class="form" action="{% url 'index' %}#book" method="post">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+          <div class="form__errors" role="alert">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+        <div class="form__col">
+          <label class="field">
+            <span>Full Name</span>
+            <input type="text" name="name" placeholder="e.g. Amina Wanjiku" value="{{ form.name.value|default:'' }}" required>
+            {{ form.name.errors }}
+          </label>
+          <label class="field">
+            <span>Email Address</span>
+            <input type="email" name="email" placeholder="amina@email.com" value="{{ form.email.value|default:'' }}" required>
+            {{ form.email.errors }}
+          </label>
+          <label class="field">
+            <span>Preferred Date</span>
+            <input type="date" name="date" min="{% now 'Y-m-d' %}" value="{{ form.date.value|default:'' }}" required>
+            {{ form.date.errors }}
+          </label>
+        </div>
+
+        <div class="form__col">
+          <label class="field">
+            <span>Service</span>
+            <select name="service">
+              {% for value, label in form.fields.service.choices %}
+                {% if value %}
+                  <option value="{{ value }}" {% if form.service.value == value %}selected{% endif %}>{{ label }}</option>
+                {% endif %}
+              {% endfor %}
+            </select>
+          </label>
+          <label class="field">
+            <span>Time</span>
+            <input type="time" name="time" value="{{ form.time.value|default:'10:30' }}" required>
+            {{ form.time.errors }}
+          </label>
+          <label class="field">
+            <span>Notes (optional)</span>
+            <textarea name="notes" rows="1" placeholder="Any special requests...">{{ form.notes.value|default:'' }}</textarea>
+          </label>
+        </div>
+
+        <button type="submit" class="form__submit"
+        onclick="if (this.form.checkValidity()) { this.textContent = 'Saving…'; this.form.requestSubmit(); this.disabled = true; } else { this.form.reportValidity(); }">
+  Confirm Booking
+</button>
+      </form>
+
+      <p class="booking__note">
+        <svg><use href="#i-lock"/></svg>
+        Secure booking <i>•</i> Free cancellation up to 24hrs
+      </p>
+    </section>
+
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer container" id="contact">
+    <p>© {% now "Y" %} GLOW SALON <i>•</i> Nairobi, Kenya</p>
+    <nav aria-label="Footer">
+      <a href="#">Privacy</a> <i>•</i> <a href="#">Terms</a> <i>•</i>
+      <a href="#">Instagram</a> <i>•</i> <a href="#">WhatsApp</a>
+    </nav>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,158 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact Us | Glow Salon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+
+  <!-- Reusable icons -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></symbol>
+  </svg>
+
+  <!-- ========== HEADER ========== -->
+  <header class="header container">
+    <a href="{% url 'index' %}" class="logo" aria-label="Glow Salon home">
+      <span class="logo__word">GL<span class="logo__o">O</span>W</span>
+      <span class="logo__sub">SALON</span>
+    </a>
+
+    <nav class="nav" aria-label="Main">
+      <a href="{% url 'index' %}" class="nav__link">Home</a>
+      <a href="{% url 'services' %}" class="nav__link">Services</a>
+      <a href="{% url 'gallery' %}" class="nav__link">Gallery</a>
+      <a href="{% url 'about' %}" class="nav__link">About</a>
+      <a href="{% url 'contact' %}" class="nav__link is-active">Contact</a>
+
+      {% if request.user.is_staff %}
+        <a href="{% url 'dashboard' %}" class="nav__admin"><svg><use href="#i-lock"/></svg> Dashboard</a>
+      {% else %}
+        <a href="{% url 'dashboard_login' %}" class="nav__admin"><svg><use href="#i-lock"/></svg> Admin Login</a>
+      {% endif %}
+
+      <a href="{% url 'index' %}#book" class="btn btn--dark nav__cta">Book Now</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ========== HERO ========== -->
+    <section class="contact-hero container">
+      <div class="contact-hero__text">
+        <h1>Contact Us</h1>
+        <p class="contact-hero__tag">We'd Love To Make You Glow</p>
+        <p class="hero__lead">Have a question about our services or want to book an appointment? Our team is ready to welcome you.</p>
+        <div class="hero__buttons">
+          <a href="{% url 'index' %}#book" class="btn btn--dark btn--lg">Book Appointment</a>
+          <a href="https://wa.me/254743989921" class="btn btn--light btn--lg" target="_blank" rel="noopener">WhatsApp Us</a>
+        </div>
+      </div>
+      <figure class="hero__photo">
+        <img src="{% static 'images/team.jpg' %}" alt="The Glow Salon team" onerror="this.remove()">
+      </figure>
+    </section>
+
+    <!-- ========== CONTACT INFO ========== -->
+    <section class="contact-info container">
+      <article class="info-card">
+        <span class="info-card__icon">📍</span>
+        <h3>Visit Us</h3>
+        <p>Glow Salon, Mega Plaza - 1st Floor<br>Next to Khetia's Supermarket, Kitale Town<br>Trans-Nzoia, Kenya</p>
+      </article>
+
+      <article class="info-card">
+        <span class="info-card__icon">📞</span>
+        <h3>Call / WhatsApp</h3>
+        <p><a href="tel:+254743989921">+254 743989921</a><br>
+           <a href="tel:+254743989921">+254 743989921</a> <small>(Bookings)</small></p>
+      </article>
+
+      <article class="info-card">
+        <span class="info-card__icon">✉️</span>
+        <h3>Email Us</h3>
+        <p><a href="mailto:hello@glowsalon.co.ke">hello@glowsalon.co.ke</a><br>
+           <a href="mailto:bookings@glowsalon.co.ke">bookings@glowsalon.co.ke</a></p>
+      </article>
+
+      <article class="info-card">
+        <span class="info-card__icon">⏰</span>
+        <h3>Working Hours</h3>
+        <ul class="hours">
+          <li><span>Monday - Friday</span><span>8:00 AM - 8:00 PM</span></li>
+          <li><span>Saturday</span><span>7:30 AM - 8:30 PM</span></li>
+          <li><span>Sunday</span><span>9:00 AM - 6:00 PM</span></li>
+        </ul>
+        <p class="hours__note">We are open on Public Holidays</p>
+      </article>
+    </section>
+
+    <!-- ========== MAP ========== -->
+    <section class="contact-map container">
+      <h2>Find Us on Map</h2>
+      <div class="map-wrap">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.009640218846!2d36.91955221128939!3d-1.
+        1536040988305014!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f3991a0ff6d4f%3A0x6aa314edb3f017dc!2sVix%20Glow%20Salon%20%26%20Beauty!5e0!3m2!1sen!2ske!4v1791475473371!5m2!1sen!2ske"
+         width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      </div>
+      <a href="https://www.google.com/maps/place/Vix+Glow+Salon+%26+Beauty/@-1.1536041,36.9195522,17z/data=!3m1!4b1!4m6!3m5!1s0x182f3991a0ff6d4f:0x6aa314edb3f017dc!8m2!3d-1.1536041!4d36.9221325!16s%2Fg%2F11zxndv1yc?entry=ttu&g_ep=EgoyMDI2MTAwNS4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener" class="btn btn--dark">
+        Get Directions <svg class="btn__arrow"><use href="#i-arrow"/></svg>
+      </a>
+    </section>
+
+    <!-- ========== WHY VISIT ========== -->
+    <section class="why container">
+      <h2>Why Visit Glow?</h2>
+      <div class="why__grid">
+        <div class="why__item"><span>👩🏾‍🎨</span>Professional Kenyan Team</div>
+        <div class="why__item"><span>🧼</span>Clean &amp; Hygienic Tools</div>
+        <div class="why__item"><span>📶</span>Free WiFi &amp; Tea</div>
+        <div class="why__item"><span>💳</span>M-Pesa &amp; Card Accepted</div>
+      </div>
+    </section>
+
+    <!-- ========== SOCIAL ========== -->
+    <section class="social container">
+      <h2>Follow Our Glow</h2>
+      <div class="social__links">
+        <a href="https://instagram.com/glowsalon.kitale" target="_blank" rel="noopener">
+          <strong>Instagram</strong><span>@glowsalon.kitale</span></a>
+        <a href="https://facebook.com/" target="_blank" rel="noopener">
+          <strong>Facebook</strong><span>Glow Salon Kitale</span></a>
+        <a href="https://tiktok.com/@glowsalonkitale" target="_blank" rel="noopener">
+          <strong>TikTok</strong><span>@glowsalonkitale</span></a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer container" id="contact">
+    <p>© {% now "Y" %} GLOW SALON <i>•</i> Kitale, Kenya</p>
+    <nav aria-label="Footer">
+      <a href="#">Privacy</a> <i>•</i> <a href="#">Terms</a> <i>•</i>
+      <a href="#">Instagram</a> <i>•</i> <a href="#">WhatsApp</a>
+    </nav>
+  </footer>
+
+  <!-- Floating Call & WhatsApp buttons -->
+<div class="float-contact">
+  <a href="tel:+2547XXXXXXXX" class="float-btn float-btn--call" aria-label="Call Glow Salon">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8a15.1 15.1 0 006.6 6.6l2.2-2.2a1 1 0 011-.25 11.4 11.4 0 003.6.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.25 1z"/></svg>
+    <span>Call</span>
+  </a>
+  <a href="https://wa.me/2547XXXXXXXX?text=Hello%20Glow%20Salon%2C%20I%20would%20like%20to%20book%20an%20appointment" target="_blank" rel="noopener" class="float-btn float-btn--wa" aria-label="Chat on WhatsApp">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm0 18.2a8.2 8.2 0 01-4.2-1.15l-.3-.18-3 .8.8-2.9-.2-.3A8.2 8.2 0 1112 20.2zm4.5-6.1c-.25-.12-1.45-.72-1.7-.8-.23-.08-.4-.12-.56.12-.17.25-.65.8-.8.97-.15.16-.3.18-.54.06a6.7 6.7 0 01-3.3-2.9c-.25-.43.25-.4.72-1.34.08-.16.04-.3-.02-.42-.06-.12-.56-1.35-.77-1.85-.2-.48-.4-.42-.56-.43h-.48a.9.9 0 00-.66.3c-.23.25-.86.85-.86 2.08s.88 2.4 1 2.57c.12.16 1.75 2.67 4.24 3.75 1.57.68 2.18.74 2.97.62.48-.07 1.45-.6 1.66-1.17.2-.57.2-1.06.14-1.17-.06-.1-.23-.16-.48-.28z"/></svg>
+    <span>WhatsApp</span>
+  </a>
+</div>
+
+</body>
+</html>

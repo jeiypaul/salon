@@ -1,0 +1,202 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Our Services | Glow Salon</title>
+  <style>
+    :root { --gold:#c9a24b; --dark:#1f1a17; --soft:#faf6f1; --pink:#d86b8a; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--soft); color:var(--dark); }
+    header { text-align:center; padding:56px 20px 28px; }
+    header h1 { font-size:2.4rem; letter-spacing:1px; }
+    header p { color:#6b625b; margin-top:10px; }
+    .tabs { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; padding:10px 20px 30px; }
+    .tab { text-align:center; width:110px; padding:14px 8px; border-radius:14px; background:#fff;
+           cursor:pointer; border:2px solid transparent; box-shadow:0 2px 8px rgba(0,0,0,.06); transition:.2s; }
+    .tab:hover, .tab.active { border-color:var(--gold); transform:translateY(-3px); }
+    .tab .icon { font-size:1.9rem; }
+    .tab span { display:block; margin-top:6px; font-weight:600; font-size:.9rem; }
+    .grid { max-width:1150px; margin:0 auto; padding:0 20px 60px;
+            display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:26px; }
+    .card { background:#fff; border-radius:18px; overflow:hidden; box-shadow:0 4px 16px rgba(0,0,0,.08);
+            display:flex; flex-direction:column; }
+    .card.hidden { display:none; }
+    .card.bridal { border:2px solid var(--gold); }
+    .card img { width:100%; height:210px; object-fit:cover; background:#e9dfd3; }
+    .body { padding:20px; display:flex; flex-direction:column; flex:1; }
+    .body h2 { font-size:1.4rem; }
+    .price { color:var(--pink); font-weight:700; margin:6px 0 12px; }
+    .body ul { list-style:none; margin-bottom:18px; flex:1; }
+    .body li { padding:6px 0; border-bottom:1px dashed #eee; font-size:.95rem; }
+    .body li::before { content:"✦ "; color:var(--gold); }
+    .btn { display:block; text-align:center; background:var(--dark); color:#fff; padding:12px;
+           border-radius:10px; text-decoration:none; font-weight:600; }
+    .btn:hover { background:var(--gold); }
+    .badge { background:var(--gold); color:#fff; font-size:.7rem; padding:3px 10px; border-radius:20px;
+             vertical-align:middle; margin-left:6px; }
+    
+    /* ===== HEADER / NAV ===== */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding-top: 22px;
+  padding-bottom: 22px;
+}
+
+/* Logo */
+.logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+  text-decoration: none;
+  color: #1a1a1a;
+}
+.logo__word {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.7rem;
+  font-weight: 600;
+  letter-spacing: 3px;
+}
+.logo__o { color: #c9a24b; }
+.logo__sub {
+  font-size: .62rem;
+  letter-spacing: 6px;
+  margin-top: 4px;
+  color: #6b625b;
+}
+
+/* Nav */
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+.nav__link {
+  position: relative;
+  font-family: 'Inter', sans-serif;
+  font-size: .95rem;
+  font-weight: 500;
+  color: #1a1a1a;
+  text-decoration: none;
+  padding: 6px 0;
+  transition: color .2s;
+}
+.nav__link::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 0; height: 2px;
+  background: #c9a24b;
+  transition: width .25s;
+}
+.nav__link:hover,
+.nav__link.is-active { color: #c9a24b; }
+.nav__link:hover::after,
+.nav__link.is-active::after { width: 100%; }
+
+/* Admin link */
+.nav__admin {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: .85rem;
+  font-weight: 500;
+  color: #6b625b;
+  text-decoration: none;
+  transition: color .2s;
+}
+.nav__admin:hover { color: #1a1a1a; }
+.nav__admin svg {
+  width: 16px; height: 16px;
+  fill: none; stroke: currentColor;
+}
+
+/* Book Now button */
+.nav__cta {
+  padding: 11px 24px;
+  border-radius: 999px;
+  font-size: .9rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Mobile */
+@media (max-width: 860px) {
+  .header { flex-direction: column; gap: 16px; }
+  .nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px 22px;
+  }
+}
+  </style>
+
+  <nav class="nav" aria-label="Main">
+      <a href="{% url 'index' %}" class="nav__link is-active">Home</a>
+      <a href="{% url 'services' %}" class="nav__link">Services</a>
+      <a href="{% url 'gallery' %}" class="nav__link">Gallery</a>
+      <a href="{% url 'about' %}" class="nav__link">About</a>
+      <a href="{% url 'contact' %}" class="nav__link">Contact</a>
+
+      {% if request.user.is_staff %}
+        <a href="{% url 'dashboard' %}" class="nav__admin">
+          <svg><use href="#i-lock"/></svg> Dashboard
+        </a>
+      {% else %}
+        <a href="{% url 'dashboard_login' %}" class="nav__admin">
+          <svg><use href="#i-lock"/></svg> Admin Login
+        </a>
+      {% endif %}
+
+      <a href="{% url 'index' %}#book" class="btn btn--dark nav__cta">Book Now</a>
+    </nav>
+</head>
+<body>
+
+<header>
+  <h1>Our Services</h1>
+  <p>Pamper yourself — hair, beauty and relaxation, all under one roof.</p>
+</header>
+
+<!-- Category icons (filter) -->
+<nav class="tabs">
+  <div class="tab active" data-filter="all"><div class="icon">✨</div><span>All</span></div>
+  {% for s in services %}
+  <div class="tab" data-filter="{{ s.slug }}"><div class="icon">{{ s.icon }}</div><span>{{ s.name }}</span></div>
+  {% endfor %}
+</nav>
+
+<!-- Service cards -->
+<main class="grid">
+  {% for s in services %}
+  <section class="card {{ s.slug }}{% if s.slug == 'bridal' %} bridal{% endif %}" data-cat="{{ s.slug }}" id="{{ s.slug }}">
+    <img src="{% static s.image %}" alt="{{ s.name }} at Glow Salon">
+    <div class="body">
+      <h2>{{ s.name }}{% if s.slug == 'bridal' %}<span class="badge">PREMIUM</span>{% endif %}</h2>
+      <p class="price">{{ s.price_label }} from KES {{ s.price|floatformat:"0g" }}</p>
+      <ul>
+        {% for item in s.items %}<li>{{ item }}</li>{% endfor %}
+      </ul>
+      <a class="btn" href="{% url 'index' %}?service={{ s.slug }}#booking">Book {{ s.name }}</a>
+    </div>
+  </section>
+  {% endfor %}
+</main>
+
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const cards = document.querySelectorAll('.card');
+  tabs.forEach(t => t.addEventListener('click', () => {
+    tabs.forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    const f = t.dataset.filter;
+    cards.forEach(c => c.classList.toggle('hidden', f !== 'all' && c.dataset.cat !== f));
+  }));
+</script>
+</body>
+</html>
